@@ -20,9 +20,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          cat .deploy/xzpart* > /tmp/site.b64
+          base64 -d /tmp/site.b64 > /tmp/site.tar.xz
           rm -rf /tmp/site
           mkdir -p /tmp/site
-          tar -xzf .deploy/site.tar.gz -C /tmp/site
+          tar -xJf /tmp/site.tar.xz -C /tmp/site
           test -f /tmp/site/index.html
           find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.github' ! -name '.deploy' -exec rm -rf {} +
           cp -a /tmp/site/. ./
